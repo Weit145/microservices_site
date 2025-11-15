@@ -1,0 +1,52 @@
+version: '3.8'
+
+networks:
+  microservices_net:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_auth
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: auth_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+    networks:
+      - microservices_net
+
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: auth_service
+    ports:
+      - "50051:50051"
+    depends_on:
+      - postgres
+    command: ["poetry", "run", "python", "main.py"]
+    networks:
+      - microservices_net
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    container_name: gateway 
+    ports:
+      - "8000:8000"
+    environment:
+      - AUTH_HOST=auth-service
+      - AUTH_PORT=50051
+    depends_on:
+      - auth-service
+    networks:
+      - microservices_net
+
+volumes:
+  auth_db_data:
