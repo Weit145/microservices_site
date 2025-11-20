@@ -1,0 +1,12 @@
+[submodule "auth-service"]
+	path = auth-service
+	url = https://github.com/Weit145/auth-service
+[submodule "gateway"]
+	path = gateway
+	url = https://github.com/Weit145/gateway
+[submodule "proto"]
+	path = proto
+	url = https://github.com/Weit145/proto-repo
+[submodule "task-service"]
+	path = task-service
+	url = https://github.com/Weit145/task-service
