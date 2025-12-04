@@ -61,6 +61,35 @@ services:
     networks:
       - microservices_net
   
+  postgres_user:
+    image: postgres:16
+    container_name: postgres_user
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: user_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - user_db_data:/var/lib/postgresql/data
+    networks:
+      - microservices_net
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user_service
+    ports:
+      - "50053:50053"
+    depends_on:
+      - postgres_user
+      - kafka
+    command: ["poetry", "run", "python", "app/main.py"]
+    networks:
+      - microservices_net
+  
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
@@ -116,5 +145,6 @@ services:
       - microservices_net
 
 volumes:
+  user_db_data:
   auth_db_data:
   rabbitmq-data:
