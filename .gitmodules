@@ -10,3 +10,6 @@
 [submodule "task-service"]
 	path = task-service
 	url = https://github.com/Weit145/task-service
+[submodule "user-service"]
+	path = user-service
+	url = https://github.com/Weit145/user-service
