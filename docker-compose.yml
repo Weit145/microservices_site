@@ -2,7 +2,6 @@ networks:
   microservices_net:
     driver: bridge
 
-
 services:
   postgres:
     image: postgres:16
