@@ -1,0 +1,13 @@
+    poetry run python app/main.py
+    docker compose up --build
+    git submodule add https://github.com/Weit145/proto-repo proto
+    git submodule update --init --recursive --remote
+
+    poetry run python -m grpc_tools.protoc     -I proto     --python_out=proto     --grpc_python_out=proto     proto/auth/auth.proto 
+    poetry run python -m grpc_tools.protoc     -I proto     --python_out=proto     --grpc_python_out=proto     proto/user/user.proto 
+    docker compose exec auth-service /bin/sh
+    # внутри контейнера
+    alembic upgrade head
+
+    docker exec -it kafka bash
+    kafka-console-consumer --bootstrap-server localhost:9092 --topic registration
