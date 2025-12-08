@@ -89,6 +89,35 @@ services:
     command: ["poetry", "run", "python", "app/main.py"]
     networks:
       - microservices_net
+
+  postgres_post:
+    image: postgres:16
+    container_name: postgres_post
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: post_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - post_db_data:/var/lib/postgresql/data
+    networks:
+      - microservices_net
+
+  post-service:
+    build:
+      context: ./post-service
+      dockerfile: Dockerfile
+    container_name: post_service
+    ports:
+      - "50054:50054"
+    depends_on:
+      - postgres_post
+      - kafka
+    command: ["poetry", "run", "python", "app/main.py"]
+    networks:
+      - microservices_net
   
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -145,6 +174,7 @@ services:
       - microservices_net
 
 volumes:
+  post_db_data:
   user_db_data:
   auth_db_data:
   rabbitmq-data:
