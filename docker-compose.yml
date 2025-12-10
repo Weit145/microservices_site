@@ -172,6 +172,21 @@ services:
       - rabbitmq-data:/var/lib/rabbitmq
     networks:
       - microservices_net
+  
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    volumes:
+      - ./frontend:/app
+    networks:
+      - microservices_net
 
 volumes:
   post_db_data:

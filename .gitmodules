@@ -16,3 +16,6 @@
 [submodule "post-service"]
 	path = post-service
 	url = https://github.com/Weit145/post-service
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/colosss/kload-frontend
