@@ -1,9 +1,12 @@
+version: "3.9"
+
 networks:
   microservices_net:
     driver: bridge
 
 services:
-  postgres:
+  # ==================== PostgreSQL ====================
+  postgres_auth:
     image: postgres:16
     container_name: postgres_auth
     restart: always
@@ -11,56 +14,13 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: auth_db
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
     volumes:
       - auth_db_data:/var/lib/postgresql/data
     networks:
       - microservices_net
 
-  auth-service:
-    build:
-      context: ./auth-service
-      dockerfile: Dockerfile
-    container_name: auth_service
-    ports:
-      - "50051:50051"
-    depends_on:
-      - postgres
-      - kafka
-    command: ["poetry", "run", "python", "app/main.py"]
-    networks:
-      - microservices_net
-
-  gateway:
-    build:
-      context: .
-      dockerfile: gateway/Dockerfile
-    container_name: gateway 
-    ports:
-      - "8000:8000"
-    environment:
-      - AUTH_HOST=auth-service
-      - AUTH_PORT=50051
-    depends_on:
-      - auth-service
-    networks:
-      - microservices_net
-
-  task-service:
-    build:
-      context: ./task-service
-      dockerfile: Dockerfile
-    container_name: task-service 
-    ports:
-      - "50052:50052"
-    depends_on:
-      - rabbitmq
-    env_file:
-      - ./task-service/.env
-    networks:
-      - microservices_net
-  
   postgres_user:
     image: postgres:16
     container_name: postgres_user
@@ -69,24 +29,10 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: user_db
-    ports:
-      - "5433:5432"
+    expose:
+      - "5432"
     volumes:
       - user_db_data:/var/lib/postgresql/data
-    networks:
-      - microservices_net
-
-  user-service:
-    build:
-      context: ./user-service
-      dockerfile: Dockerfile
-    container_name: user_service
-    ports:
-      - "50053:50053"
-    depends_on:
-      - postgres_user
-      - kafka
-    command: ["poetry", "run", "python", "app/main.py"]
     networks:
       - microservices_net
 
@@ -98,10 +44,39 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: post_db
-    ports:
-      - "5434:5432"
+    expose:
+      - "5432"
     volumes:
       - post_db_data:/var/lib/postgresql/data
+    networks:
+      - microservices_net
+
+  # ==================== gRPC и Python-сервисы ====================
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: auth_service
+    expose:
+      - "50051"
+    depends_on:
+      - postgres_auth
+      - kafka
+    command: ["poetry", "run", "python", "app/main.py"]
+    networks:
+      - microservices_net
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user_service
+    expose:
+      - "50053"
+    depends_on:
+      - postgres_user
+      - kafka
+    command: ["poetry", "run", "python", "app/main.py"]
     networks:
       - microservices_net
 
@@ -110,36 +85,29 @@ services:
       context: ./post-service
       dockerfile: Dockerfile
     container_name: post_service
-    ports:
-      - "50054:50054"
+    expose:
+      - "50054"
     depends_on:
       - postgres_post
       - kafka
     command: ["poetry", "run", "python", "app/main.py"]
     networks:
       - microservices_net
-  
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    container_name: kafka
-    environment:
-      KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_BROKER_ID: 1
-      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
-      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_NUM_PARTITIONS: 1
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    ports:
-      - "9092:9092"
-      - "9093:9093"
+
+  task-service:
+    build:
+      context: ./task-service
+      dockerfile: Dockerfile
+    container_name: task-service
+    expose:
+      - "50052"
+    depends_on:
+      - rabbitmq
+    env_file:
+      - ./task-service/.env
     networks:
       - microservices_net
 
-  
   celery:
     build:
       context: ./task-service
@@ -157,31 +125,66 @@ services:
     networks:
       - microservices_net
 
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    container_name: gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - AUTH_HOST=auth-service
+      - AUTH_PORT=50051
+    depends_on:
+      - auth-service
+    networks:
+      - microservices_net
+
+  # ==================== Kafka / RabbitMQ / Redis ====================
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    environment:
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_BROKER_ID: 1
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_NUM_PARTITIONS: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    expose:
+      - "9092"
+      - "9093"
+    networks:
+      - microservices_net
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    hostname: rabbitmq
     container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: "guest"
       RABBITMQ_DEFAULT_PASS: "guest"
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
+    expose:
+      - "5672"
+      - "15672"
     networks:
       - microservices_net
 
   redis:
     image: redis:6.2-alpine
     container_name: redis
-    ports:
-      - "6379:6379"
     restart: always
+    expose:
+      - "6379"
     networks:
       - microservices_net
-  
+
+  # ==================== Frontend + Nginx ====================
   frontend:
     build:
       context: ./frontend
@@ -194,6 +197,21 @@ services:
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     volumes:
       - ./frontend:/app
+    networks:
+      - microservices_net
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    depends_on:
+      - frontend
+      - gateway
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/certs:/etc/letsencrypt
+    ports:
+      - "80:80"
+      - "443:443"
     networks:
       - microservices_net
 
