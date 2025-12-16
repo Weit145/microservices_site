@@ -14,8 +14,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: auth_db
-    expose:
-      - "5432"
+    ports:
+      - "5432:5432"
     volumes:
       - auth_db_data:/var/lib/postgresql/data
     networks:
@@ -29,8 +29,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: user_db
-    expose:
-      - "5432"
+    ports:
+      - "5433:5432"
     volumes:
       - user_db_data:/var/lib/postgresql/data
     networks:
@@ -44,8 +44,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: post_db
-    expose:
-      - "5432"
+    ports:
+      - "5434:5432"
     volumes:
       - post_db_data:/var/lib/postgresql/data
     networks:
