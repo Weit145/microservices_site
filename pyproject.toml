@@ -12,7 +12,8 @@ dependencies = [
     "uvicorn[standard] (>=0.35.0,<0.36.0)",
     "pydantic[email] (>=2.11.9,<3.0.0)",
     "grpcio (>=1.76.0,<2.0.0)",
-    "grpcio-tools (>=1.76.0,<2.0.0)"
+    "grpcio-tools (>=1.76.0,<2.0.0)",
+    "ruff (>=0.14.9,<0.15.0)"
 ]
 
 
