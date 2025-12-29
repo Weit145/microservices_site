@@ -7,6 +7,7 @@ poetry run python -m grpc_tools.protoc     -I proto     --python_out=proto     -
 poetry run python -m grpc_tools.protoc     -I proto     --python_out=proto     --grpc_python_out=proto     proto/user/user.proto 
 poetry run python -m grpc_tools.protoc     -I proto     --python_out=proto     --grpc_python_out=proto     proto/post/post.proto 
 poetry run python -m grpc_tools.protoc     -I proto     --python_out=proto     --grpc_python_out=proto     proto/user_post/user_post.proto 
+poetry run python -m grpc_tools.protoc     -I proto     --python_out=proto     --grpc_python_out=proto     proto/admin/admin.proto 
 docker compose exec auth-service /bin/sh
 # внутри контейнера
 alembic upgrade head
