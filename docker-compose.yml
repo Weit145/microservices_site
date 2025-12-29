@@ -107,6 +107,19 @@ services:
       - ./task-service/.env
     networks:
       - microservices_net
+    
+  admin-service:
+    build:
+      context: ./admin-service
+      dockerfile: Dockerfile
+    container_name: admin_service
+    expose:
+      - "50056"
+    depends_on:
+      - kafka
+    command: ["poetry", "run", "python", "app/main.py"]
+    networks:
+      - microservices_net
 
   celery:
     build:
@@ -231,7 +244,7 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --renew-hook /renew-hook.sh --quiet; sleep 12h; done;'"
     depends_on:
       - nginx
-      
+
 volumes:
   post_db_data:
   user_db_data:
