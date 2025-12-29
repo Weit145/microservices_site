@@ -143,15 +143,21 @@ services:
       context: .
       dockerfile: gateway/Dockerfile
     container_name: gateway
+    restart: always  # добавьте, чтобы перезапускался при падении
     ports:
       - "8000:8000"
     environment:
       - AUTH_HOST=auth-service
       - AUTH_PORT=50051
+      # Добавьте другие env, если нужны (например, из старого compose)
     depends_on:
       - auth-service
     networks:
       - microservices_net
+    volumes:
+      - ./gateway:/app  # ← монтируем код в /app
+    working_dir: /app   # ← рабочая директория
+    command: ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
   # ==================== Kafka / RabbitMQ / Redis ====================
   kafka:
