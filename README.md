@@ -32,7 +32,7 @@
 </p>
 
 <p align="center">
-  <em>High-level architecture of the microservices platform</em>
+  <em>Architecture of the microservices platform</em>
 </p>
 
 - микросервисная архитектура;
