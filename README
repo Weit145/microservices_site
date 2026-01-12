@@ -19,11 +19,16 @@
   - документация по архитектуре платформы.
 Каждый микросервис разрабатывается и версионируется в отдельном репозитории.
 
-## 🧱 Архитектура:
+## 🧱 Архитектура
 
 <p align="center">
   <img src="docs/architecture.png" width="800">
 </p>
+
+<p align="center">
+  <em>High-level architecture of the microservices platform</em>
+</p>
+
 
   - микросервисная архитектура;
   - отдельная база данных на сервис;
@@ -32,29 +37,33 @@
   - асинхронные задачи через RabbitMQ + Celery;
   - событийная интеграция через Kafka.
 
-## 📦 Сервисы платформы:
-| Сервис        | Назначение                               | Репозиторий                                                   |
-| ------------- | ---------------------------------------- | --------------------------------------------------------------|
-| Auth Service  | Аутентификация, JWT, email-подтверждение | [auth-service](https://github.com/Weit145/auth-service)       |
-| User Service  | Пользовательские профили                 | [user-service](https://github.com/Weit145/user-service)       |
-| Post Service  | Посты и публикации                       | [post-service](https://github.com/Weit145/post-service)       |
-| Task Service  | Асинхронные задачи                       | [task-service](https://github.com/Weit145/task-service)       |
-| Gateway       | HTTP → gRPC API Gateway                  | [gateway-service](https://github.com/Weit145/gateway-service) |
-| Admin Service | Внутренние админ-задачи                  | [admin-service](https://github.com/Weit145/admin-service)     |
-| Frontend      | Веб-интерфейс на React                   | [kload-frontend](https://github.com/colosss/kload-frontend)   |
+## 📦 Сервисы платформы
 
-## 🗄️ Хранилища данных:
+| Сервис        | Назначение                               | Репозиторий |
+|--------------|-------------------------------------------|------------|
+| Auth Service | Аутентификация, JWT, email-подтверждение | [auth-service](https://github.com/Weit145/auth-service) |
+| User Service | Пользовательские профили                 | [user-service](https://github.com/Weit145/user-service) |
+| Post Service | Посты и публикации                       | [post-service](https://github.com/Weit145/post-service) |
+| Task Service | Асинхронные задачи                       | [task-service](https://github.com/Weit145/task-service) |
+| Gateway      | HTTP → gRPC API Gateway                  | [gateway-service](https://github.com/Weit145/gateway-service) |
+| Admin Service| Внутренние админ-задачи                  | [admin-service](https://github.com/Weit145/admin-service) |
+| Frontend     | Веб-интерфейс (React)                    | [kload-frontend](https://github.com/colosss/kload-frontend) |
+
+## 🗄️ Хранилища данных
+
   - PostgreSQL (отдельный инстанс на сервис)
   - RabbitMQ — очередь задач
   - Kafka — брокер событий
 
 ## 🌐 Точка входа
+
 Nginx является единственным публичным компонентом системы и отвечает за:
   - HTTPS;
   - проксирование запросов;
   - маршрутизацию трафика к frontend и API Gateway.
 
 ## 🐳 Запуск платформы
+
 Локально
   - Установите Docker и Docker Compose.
   - Склонируйте данный репозиторий.
@@ -63,7 +72,8 @@ Nginx является единственным публичным компон�
     - frontend доступен по /;
     - API доступно через /api;
 
-## 🔗 Репозитории сервисов:
+## 🔗 Репозитории сервисов
+
   - Auth Service: 🔗 https://github.com/Weit145/auth-service
   - User Service: 🔗 https://github.com/Weit145/user-service
   - Post Service: 🔗 https://github.com/Weit145/post-service
@@ -72,13 +82,15 @@ Nginx является единственным публичным компон�
   - Admin Service: 🔗 https://github.com/Weit145/admin-service
   - Frontend: 🔗 https://github.com/colosss/kload-frontend
 
-## 🧠 Почему такая структура:
+## 🧠 Почему такая структура
+
   - упрощает масштабирование команды;
   - позволяет независимо версионировать сервисы;
   - снижает связанность компонентов;
   - приближает проект к production-подходу.
 
 ## 🚀 Что можно добавить или улудшить?
+
   - observability (Prometheus, Grafana, tracing);
   - CI/CD пайплайны;
   - Тестирование на каждом уровне.
