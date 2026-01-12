@@ -21,7 +21,7 @@
 
 🧱 Архитектура:
 
-![Microservices Architecture](docs/architecture.png)
+![Microservices Architecture](microservices_site/docs/architecture.png)
 
   • микросервисная архитектура;
   • отдельная база данных на сервис;
