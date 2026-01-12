@@ -143,24 +143,19 @@ services:
       context: .
       dockerfile: gateway/Dockerfile
     container_name: gateway
-    restart: always  # добавьте, чтобы перезапускался при падении
+    restart: always
     ports:
       - "8000:8000"
     environment:
       - AUTH_HOST=auth-service
       - AUTH_PORT=50051
-      # Добавьте другие env, если нужны (например, из старого compose)
     depends_on:
       - auth-service
     networks:
       - microservices_net
     volumes:
-      - ./gateway:/app  # ← монтируем код в /app
-    working_dir: /app   # ← рабочая директория
-    # command: >  # измени на это, чтобы устанавливать зависимости при каждом запуске
-    #   sh -c "poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi && poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
-    # # command: ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-
+      - ./gateway:/app
+    working_dir: /app
   # ==================== Kafka / RabbitMQ / Redis ====================
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -227,7 +222,7 @@ services:
       - gateway
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/certs:/etc/letsencrypt:ro   # только чтение для nginx
+      - ./nginx/certs:/etc/letsencrypt:ro
       - ./nginx/certbot/www:/var/www/certbot:ro
     ports:
       - "80:80"
@@ -238,7 +233,7 @@ services:
   certbot:
     image: certbot/certbot:latest
     volumes:
-      - ./nginx/certs:/etc/letsencrypt:rw   # запись для certbot
+      - ./nginx/certs:/etc/letsencrypt:rw
       - ./nginx/certbot/www:/var/www/certbot:rw
     depends_on:
       - nginx
@@ -248,7 +243,7 @@ services:
     volumes:
       - ./nginx/certs:/etc/letsencrypt:rw
       - ./nginx/certbot/www:/var/www/certbot:rw
-      - ./nginx/renew-hook.sh:/renew-hook.sh:ro   # ← добавь этот volume
+      - ./nginx/renew-hook.sh:/renew-hook.sh:ro
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --renew-hook /renew-hook.sh --quiet; sleep 12h; done;'"
     depends_on:
       - nginx
