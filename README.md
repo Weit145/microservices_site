@@ -46,15 +46,15 @@
 
 ## 📦 Сервисы платформы
 
-| Сервис        | Назначение                              |
-|--------------|------------------------------------------|
-| Auth Service | Аутентификация, JWT, email-подтверждение |
-| User Service | Пользовательские профили                 |
-| Post Service | Посты и публикации                       |
-| Task Service | Асинхронные задачи                       |
-| Gateway      | HTTP → gRPC API Gateway                  |
-| Admin Service| Внутренние административные задачи       |
-| Frontend     | Веб-интерфейс (React)                    |
+| Сервис        | Назначение                               | Репозиторий |
+|--------------|-------------------------------------------|------------|
+| Auth Service | Аутентификация, JWT, email-подтверждение | [auth-service](https://github.com/Weit145/auth-service) |
+| User Service | Пользовательские профили                 | [user-service](https://github.com/Weit145/user-service) |
+| Post Service | Посты и публикации                       | [post-service](https://github.com/Weit145/post-service) |
+| Task Service | Асинхронные задачи                       | [task-service](https://github.com/Weit145/task-service) |
+| Gateway      | HTTP → gRPC API Gateway                  | [gateway-service](https://github.com/Weit145/gateway-service) |
+| Admin Service| Внутренние админ-задачи                  | [admin-service](https://github.com/Weit145/admin-service) |
+| Frontend     | Веб-интерфейс (React)                    | [kload-frontend](https://github.com/colosss/kload-frontend) |
 
 Подробное описание API, бизнес-логики и схем данных находится в README соответствующих сервисов.
 
