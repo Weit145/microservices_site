@@ -21,14 +21,7 @@
 
 ## 🧱 Архитектура
 
-<p align="center">
-  <img src="docs/architecture.png" width="800">
-</p>
-
-<p align="center">
-  <em>High-level architecture of the microservices platform</em>
-</p>
-
+  ![Architecture Diagram](docs/architecture.png)
 
   - микросервисная архитектура;
   - отдельная база данных на сервис;
