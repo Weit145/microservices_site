@@ -21,7 +21,7 @@
 
 ## 🧱 Архитектура
 
-  ![Architecture Diagram](docs/architecture.png)
+  ![Architecture Diagram](/docs/architecture.png)
 
   - микросервисная архитектура;
   - отдельная база данных на сервис;
