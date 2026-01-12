@@ -21,7 +21,9 @@
 
 🧱 Архитектура:
 
-![Microservices Architecture](microservices_site/docs/architecture.png)
+<p align="center">
+  <img src="docs/architecture.png" width="800">
+</p>
 
   • микросервисная архитектура;
   • отдельная база данных на сервис;
@@ -31,15 +33,15 @@
   • событийная интеграция через Kafka.
 
 📦 Сервисы платформы:
-| Сервис        | Назначение                               | Репозиторий                                   |
-| ------------- | ---------------------------------------- | --------------------------------------------- |
-| Auth Service  | Аутентификация, JWT, email-подтверждение | 🔗 https://github.com/Weit145/auth-service    |
-| User Service  | Пользовательские профили                 | 🔗 https://github.com/Weit145/user-service    |
-| Post Service  | Посты и публикации                       | 🔗 https://github.com/Weit145/post-service    |
-| Task Service  | Асинхронные задачи                       | 🔗 https://github.com/Weit145/task-service    |
-| Gateway       | HTTP → gRPC API Gateway                  | 🔗 https://github.com/Weit145/gateway-service |
-| Admin Service | Внутренние админ-задачи                  | 🔗 https://github.com/Weit145/admin-service   |
-| Frontend      | Веб-интерфейс на React                   | 🔗 https://github.com/colosss/kload-frontend  |
+| Сервис        | Назначение                               | Репозиторий                                                   |
+| ------------- | ---------------------------------------- | --------------------------------------------------------------|
+| Auth Service  | Аутентификация, JWT, email-подтверждение | [auth-service](https://github.com/Weit145/auth-service)       |
+| User Service  | Пользовательские профили                 | [user-service](https://github.com/Weit145/user-service)       |
+| Post Service  | Посты и публикации                       | [post-service](https://github.com/Weit145/post-service)       |
+| Task Service  | Асинхронные задачи                       | [task-service](https://github.com/Weit145/task-service)       |
+| Gateway       | HTTP → gRPC API Gateway                  | [gateway-service](https://github.com/Weit145/gateway-service) |
+| Admin Service | Внутренние админ-задачи                  | [admin-service](https://github.com/Weit145/admin-service)     |
+| Frontend      | Веб-интерфейс на React                   | [kload-frontend](https://github.com/colosss/kload-frontend)   |
 
 🗄️ Хранилища данных:
   • PostgreSQL (отдельный инстанс на сервис)
