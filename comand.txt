@@ -14,3 +14,20 @@ alembic upgrade head
 
 docker exec -it kafka bash
 kafka-console-consumer --bootstrap-server localhost:9092 --topic registration
+
+#изменение какого либо контейнера, пример с контейнером фронта
+docker compose stop frontend
+docker compose build frontend
+docker compose up frontend
+
+#изменение фронта
+docker compose stop frontend
+git pull
+git submodule update --init --recursive --remote
+git pull
+cd ./frontend
+npm install #можно обойтись, ведь это посторяется в самом docker файле, но для уверености лучше стоит
+npm run build
+cd ..
+docker compose build frontend
+docker compose up frontend
