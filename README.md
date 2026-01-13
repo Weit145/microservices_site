@@ -52,7 +52,7 @@
 | User Service | Пользовательские профили                 | [user-service](https://github.com/Weit145/user-service) |
 | Post Service | Посты и публикации                       | [post-service](https://github.com/Weit145/post-service) |
 | Task Service | Асинхронные задачи                       | [task-service](https://github.com/Weit145/task-service) |
-| Gateway      | HTTP → gRPC API Gateway                  | [gateway-service](https://github.com/Weit145/gateway-service) |
+| Gateway      | HTTP → gRPC API Gateway                  | [gateway-service](https://github.com/Weit145/gateway) |
 | Admin Service| Внутренние админ-задачи                  | [admin-service](https://github.com/Weit145/admin-service) |
 | Frontend     | Веб-интерфейс (React)                    | [kload-frontend](https://github.com/colosss/kload-frontend) |
 
