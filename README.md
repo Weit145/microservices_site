@@ -53,7 +53,7 @@
 | Post Service | Посты и публикации                       | [post-service](https://github.com/Weit145/post-service) |
 | Task Service | Асинхронные задачи                       | [task-service](https://github.com/Weit145/task-service) |
 | Gateway      | HTTP → gRPC API Gateway                  | [gateway-service](https://github.com/Weit145/gateway) |
-| Admin Service| Внутренние админ-задачи                  | [admin-service](https://github.com/Weit145/admin-service) |
+| Admin Service| Внутренние админ-задачи                  | [admin-service](https://github.com/colosss/admin-service.git) |
 | Frontend     | Веб-интерфейс (React)                    | [kload-frontend](https://github.com/colosss/kload-frontend) |
 
 Подробное описание API, бизнес-логики и схем данных находится в README соответствующих сервисов.
