@@ -21,4 +21,4 @@
 	url = https://github.com/colosss/kload-frontend
 [submodule "admin-service"]
 	path = admin-service
-	url = https://github.com/Weit145/admin-service
+	url = https://github.com/colosss/admin-service.git
