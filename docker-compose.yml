@@ -223,6 +223,8 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
 
+      - ./frontend/public:/usr/share/nginx/html/public:ro
+
       # Let's Encrypt
       - ./nginx/certs:/etc/letsencrypt:ro
 
