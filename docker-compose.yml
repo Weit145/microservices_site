@@ -222,8 +222,16 @@ services:
       - gateway
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+
+      # Let's Encrypt
       - ./nginx/certs:/etc/letsencrypt:ro
+
+      # Certbot challenge
       - ./nginx/certbot/www:/var/www/certbot:ro
+
+      # Dummy SSL
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+
     ports:
       - "80:80"
       - "443:443"
