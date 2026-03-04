@@ -132,7 +132,10 @@ services:
     expose:
       - "50052"
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+      kafka:                          # ← добавить
+        condition: service_healthy  
     env_file:
       - ./task-service/.env
     networks:
@@ -146,8 +149,11 @@ services:
     expose:
       - "50056"
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
     command: ["poetry", "run", "python", "app/main.py"]
+    env_file:
+      - ./admin-service/.env 
     networks:
       - microservices_net
 
@@ -160,7 +166,8 @@ services:
     volumes:
       - ./task-service:/app
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     environment:
       - CELERY_BROKER=pyamqp://guest:guest@rabbitmq:5672//
       - CELERY_RESULT_BACKEND=rpc://
@@ -207,11 +214,18 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_NUM_PARTITIONS: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CLUSTER_ID: "RF_PJkiFQfmn7V5M3a-WvQ" 
     expose:
       - "9092"
       - "9093"
     networks:
       - microservices_net
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -226,6 +240,12 @@ services:
       - "15672"
     networks:
       - microservices_net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
   redis:
     image: redis:6.2-alpine
